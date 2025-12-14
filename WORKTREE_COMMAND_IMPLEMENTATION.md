@@ -97,12 +97,14 @@ The spec generation workflow (steps 3-7 in original) determines spec quality:
 ### 1. Bash Script: `scripts/bash/init-worktree-feature.sh`
 
 Key differences from `create-new-feature.sh`:
+
 - Does NOT create a new branch - uses current branch
 - Validates current branch matches `###-name` pattern
 - Handles worktrees (where `.git` is a file, not a directory)
 - Warns if spec directory already exists (allows resuming work)
 
 **Validation logic:**
+
 ```bash
 # Get current branch
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
@@ -118,6 +120,7 @@ FEATURE_NUM=$(echo "$CURRENT_BRANCH" | grep -oE '^[0-9]{3}')
 ```
 
 **Error cases handled:**
+
 - Not in a git repository → suggests using `/speckit.specify`
 - Detached HEAD state → asks user to checkout a branch
 - Invalid branch pattern → explains correct pattern and alternatives
@@ -130,11 +133,13 @@ Identical logic to bash version, adapted for PowerShell syntax.
 ### 3. Command File: `templates/commands/wt-specify.md`
 
 **Key differences from `specify.md`:**
+
 - Skips steps 1-2 (branch name generation, number calculation)
 - Uses `init-worktree-feature.sh` instead of `create-new-feature.sh`
 - Steps 3-7 (spec generation, validation, clarification) copied verbatim
 
 **Script configuration:**
+
 ```yaml
 scripts:
   sh: scripts/bash/init-worktree-feature.sh --json "{ARGS}"
@@ -176,6 +181,7 @@ cd ../user-auth-feature
 ### Test Cases
 
 1. **Valid worktree scenario**
+
    ```bash
    # Setup
    git branch 001-test-feature
@@ -190,6 +196,7 @@ cd ../user-auth-feature
    ```
 
 2. **Invalid branch pattern**
+
    ```bash
    git checkout -b my-feature  # No number prefix
    /speckit.wt-specify "Test"
@@ -197,6 +204,7 @@ cd ../user-auth-feature
    ```
 
 3. **Detached HEAD**
+
    ```bash
    git checkout HEAD~1
    /speckit.wt-specify "Test"
@@ -204,6 +212,7 @@ cd ../user-auth-feature
    ```
 
 4. **Downstream command compatibility**
+
    ```bash
    /speckit.wt-specify "Test feature"
    /speckit.plan  # Should find the spec via get_current_branch()

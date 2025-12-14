@@ -24,6 +24,7 @@ You **MUST** consider the user input before proceeding (if not empty).
 ## Outline
 
 This command is designed for **git worktree workflows** where:
+
 - You already have a branch created (following the `###-feature-name` pattern)
 - You're working in a worktree that's checked out to that branch
 - You want to create the spec without switching branches
